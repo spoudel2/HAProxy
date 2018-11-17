@@ -25,7 +25,7 @@ yum install -y epel-release git ansible
 ### Deployment
 
 ```
-git clone git clone https://github.com/poudelpra/HAproxy.git
+git clone https://github.com/poudelpra/HAproxy.git
 cd HAproxy
 ansible-playbook haproxy.yml
 ```
