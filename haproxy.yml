@@ -1,0 +1,6 @@
+---
+- hosts: all
+#  vars_files:
+#   - roles/haproxy/vars/main.yml
+  roles:
+  - haproxy

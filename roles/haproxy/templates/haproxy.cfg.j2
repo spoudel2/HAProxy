@@ -1,0 +1,70 @@
+global
+    log         127.0.0.1 local2
+
+    chroot      /var/lib/haproxy
+    pidfile     /var/run/haproxy.pid
+    maxconn     4000
+    user        haproxy
+    group       haproxy
+    daemon
+
+    # turn on stats unix socket
+    stats socket /var/lib/haproxy/stats
+
+
+#---------------------------------------------------------------------
+# common defaults that all the 'listen' and 'backend' sections will
+# use if not designated in their block
+#---------------------------------------------------------------------
+defaults
+    mode                    http
+    log                     global
+    option                  httplog
+    option                  dontlognull
+    option http-server-close
+    option forwardfor       except 127.0.0.0/8
+    option                  redispatch
+    retries                 3
+    timeout http-request    10s
+    timeout queue           1m
+    timeout connect         10s
+    timeout client          1m
+    timeout server          1m
+    timeout http-keep-alive 10s
+    timeout check           10s
+    maxconn                 300
+
+  stats enable  # Enable stats page
+  stats uri /stats  # Stats URI
+#  stats auth Username:Password  # Authentication credentials0
+
+#---------------------------------------------------------------------
+# main frontend which proxys to the backends
+#---------------------------------------------------------------------
+frontend  main *
+    default_backend             app
+
+    stats	enable
+    stats	show-node
+    stats	refresh 60s
+    stats  uri  /stats
+
+
+#---------------------------------------------------------------------
+# round robin balancing between the various backends
+#---------------------------------------------------------------------
+backend app
+    balance roundrobin
+    server  app1 {{ server1 }} check ssl verify none
+    {% if server2 is defined %}server  app2  {{ server2 }} check ssl verify none
+    {% endif %}
+    {% if server3 is defined %}server  app3  {{ server3 }} check ssl verify none
+    {% endif %}
+    {% if server4 is defined %}server  app4  {{ server4 }} check ssl verify none
+    {% endif %}
+    {% if server5 is defined %}server  app5  {{ server5 }} check ssl verify none
+    {% endif %}
+    {% if server6 is defined %}server  app6  {{ server6 }} check ssl verify none
+    {% endif %}
+    {% if server7 is defined %}server  app7  {{ server7 }} check ssl verify none
+    {% endif %}
