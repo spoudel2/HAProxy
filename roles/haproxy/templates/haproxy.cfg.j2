@@ -1,6 +1,6 @@
 global
     log         127.0.0.1 local2
-    
+
     chroot      /var/lib/haproxy
     pidfile     /var/run/haproxy.pid
     maxconn     4000
@@ -10,6 +10,7 @@ global
 
     # turn on stats unix socket
     stats socket /var/lib/haproxy/stats
+
 
 #---------------------------------------------------------------------
 # common defaults that all the 'listen' and 'backend' sections will
@@ -40,6 +41,9 @@ defaults
 #---------------------------------------------------------------------
 # main frontend which proxys to the backends
 #---------------------------------------------------------------------
+### Please use commented frontend for higher version of HAPROXY
+#frontend main
+#    bind *:80
 frontend  main *:80
     default_backend             app
 
@@ -47,7 +51,6 @@ frontend  main *:80
     stats	show-node
     stats	refresh 60s
     stats  uri  /stats
-
 
 #---------------------------------------------------------------------
 # round robin balancing between the various backends
